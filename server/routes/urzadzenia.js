@@ -72,10 +72,9 @@ router.put('/:id', (req, res) => {
         ram, plyta, dysk, przekatna, mac, licencje, inne
     } = req.body; // Pobieramy dane z ciała zapytania (req.body)
 
-    // Sprawdzamy, czy wszystkie dane zostały przesłane
-    if (!uwiw || !kategoria || !sala || !lpwsali || !model || !wyglad || !procesor || 
-        !ram || !plyta || !dysk || !przekatna || !mac || !licencje || !inne) {
-        return res.status(400).json({ message: 'Wszystkie pola są wymagane.' });
+    // Sprawdzamy tylko wymagane pola (np. te, które są ustawione jako NOT NULL w bazie)
+    if (!uwiw || !kategoria || !sala || !lpwsali || !model || !wyglad) {
+        return res.status(400).json({ message: 'Wszystkie wymagane pola muszą być wypełnione.' });
     }
 
     const sql = `
