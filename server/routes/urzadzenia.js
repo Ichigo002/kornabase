@@ -116,6 +116,29 @@ router.put('/:id', (req, res) => {
     });
 });
 
+// DELETE - Usuwanie urządzenia
+router.delete('/:id', (req, res) => {
+    const { id } = req.params; // Pobieramy ID urządzenia z parametru URL
+
+    // Zapytanie SQL do usunięcia urządzenia na podstawie ID
+    const sql = 'DELETE FROM urzadzenia WHERE id = ?';
+
+    connection.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error('❌ Błąd podczas usuwania urządzenia:', err);
+            return res.status(500).json({ message: 'Błąd serwera.' });
+        }
+
+        // Jeśli żadna linia nie została usunięta, to oznacza, że urządzenie o danym ID nie istnieje
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Urządzenie nie zostało znalezione.' });
+        }
+
+        // Odpowiedź po pomyślnym usunięciu urządzenia
+        res.json({ message: 'Urządzenie zostało usunięte pomyślnie!' });
+    });
+});
+
 
 
 module.exports = router;
