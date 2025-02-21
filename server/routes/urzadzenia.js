@@ -64,6 +64,59 @@ router.post('/', (req, res) => {
     });
 });
 
+// Trasa do edytowania urządzenia po ID
+router.put('/:id', (req, res) => {
+    const { id } = req.params; // Pobieramy ID urządzenia z parametru URL
+    const {
+        uwiw, kategoria, sala, lpwsali, model, wyglad, procesor,
+        ram, plyta, dysk, przekatna, mac, licencje, inne
+    } = req.body; // Pobieramy dane z ciała zapytania (req.body)
+
+    // Sprawdzamy, czy wszystkie dane zostały przesłane
+    if (!uwiw || !kategoria || !sala || !lpwsali || !model || !wyglad || !procesor || 
+        !ram || !plyta || !dysk || !przekatna || !mac || !licencje || !inne) {
+        return res.status(400).json({ message: 'Wszystkie pola są wymagane.' });
+    }
+
+    const sql = `
+        UPDATE urzadzenia SET
+            uwiw = ?, kategoria = ?, sala = ?, lpwsali = ?, model = ?, wyglad = ?, procesor = ?, 
+            ram = ?, plyta = ?, dysk = ?, przekatna = ?, mac = ?, licencje = ?, inne = ?
+        WHERE id = ?
+    `;
+    connection.query(sql, [uwiw, kategoria, sala, lpwsali, model, wyglad, procesor,
+                           ram, plyta, dysk, przekatna, mac, licencje, inne, id], (err, result) => {
+        if (err) {
+            console.error('❌ Błąd podczas edytowania urządzenia:', err);
+            return res.status(500).json({ message: 'Błąd serwera' });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Urządzenie nie zostało znalezione' });
+        }
+
+        // Zwracamy dane zaktualizowanego urządzenia
+        res.json({
+            id,
+            uwiw,
+            kategoria,
+            sala,
+            lpwsali,
+            model,
+            wyglad,
+            procesor,
+            ram,
+            plyta,
+            dysk,
+            przekatna,
+            mac,
+            licencje,
+            inne,
+            message: 'Urządzenie zostało zaktualizowane'
+        });
+    });
+});
+
 
 
 module.exports = router;
