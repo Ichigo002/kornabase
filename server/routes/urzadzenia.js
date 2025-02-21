@@ -37,4 +37,33 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// Trasa do wstawiania nowego urządzenia
+router.post('/', (req, res) => {
+    const { uwiw, kategoria, sala, lpwsali, model, wyglad, procesor, ram, plyta, dysk, przekatna, mac, licencje, inne } = req.body;
+
+    // Sprawdzamy tylko wymagane pola (np. te, które są ustawione jako NOT NULL w bazie)
+    if (!uwiw || !kategoria || !sala || !lpwsali || !model || !wyglad) {
+        return res.status(400).json({ message: 'Wszystkie wymagane pola muszą być wypełnione.' });
+    }
+
+    // Przygotowanie zapytania SQL
+    const sql = `
+        INSERT INTO urzadzenia (uwiw, kategoria, sala, lpwsali, model, wyglad, procesor, ram, plyta, dysk, przekatna, mac, licencje, inne)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    // Wykonanie zapytania SQL
+    connection.query(sql, [uwiw, kategoria, sala, lpwsali, model, wyglad, procesor, ram, plyta, dysk, przekatna, mac, licencje, inne], (err, result) => {
+        if (err) {
+            console.error('❌ Błąd podczas wstawiania urządzenia:', err);
+            return res.status(500).json({ message: 'Błąd serwera.' });
+        }
+
+        // Odpowiedź po pomyślnym dodaniu urządzenia
+        res.status(201).json({ message: 'Urządzenie zostało dodane pomyślnie!', id: result.insertId });
+    });
+});
+
+
+
 module.exports = router;
