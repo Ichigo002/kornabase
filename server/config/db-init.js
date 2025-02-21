@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS uzytkownicy (
     imie TEXT NOT NULL,
     nazwisko TEXT NOT NULL,
     ranga TEXT NOT NULL,
-    haslo TEXT NOT NULL,
+    has TEXT NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin2;
 `;

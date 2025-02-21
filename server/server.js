@@ -13,13 +13,13 @@ app.use(express.json());
 app.use(cors());
 
 // Importowanie tras API
-const urzadzeniaRoutes = require('./routes/urzadzenia');
-// const uzytkownicyRoutes = require('./routes/uzytkownicy');
-// const wydarzeniaRoutes = require('./routes/wydarzenia');
+const devicesRoutes = require('./routes/devices');
+const eventsRoutes = require('./routes/events');
+const usersRoutes = require('./routes/users');
 
-app.use('/api/devices', urzadzeniaRoutes);
-// app.use('/api/uzytkownicy', uzytkownicyRoutes);
-// app.use('/api/wydarzenia', wydarzeniaRoutes);
+app.use('/api/devices', devicesRoutes);
+app.use('/api/events', eventsRoutes);
+app.use('/api/users', usersRoutes);
 
 // Sprawdzanie, czy baza danych istnieje, i tworzenie, jeśli nie
 db.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``, (err, result) => {
